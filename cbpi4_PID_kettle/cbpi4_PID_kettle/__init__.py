@@ -29,7 +29,7 @@ class PIDcontrol(CBPiKettleLogic):
             p = float(self.props.get("P", 117.0795))
             i = float(self.props.get("I", 0.2747))
             d = float(self.props.get("D", 41.58))
-            maxout = int(self.props.get("Max_Output", 100))
+            maxout = int(self.props.get("Max_Output", 255))
             minout = int(self.props.get("Min_Output", 0))
 
             # Actor and sensor setup
