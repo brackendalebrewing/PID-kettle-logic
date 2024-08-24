@@ -49,6 +49,7 @@ class PIDcontrol(CBPiKettleLogic):
                 current_kettle_power = self.heater_actor.power
                 sensor_value = current_temp = self.get_sensor_value(self.kettle.sensor).get("value")
                 target_temp = self.get_kettle_target_temp(self.id)
+                pid.setpoint = target_temp
 
                 # Calculate new power output from PID
                 heat_percent = pid(sensor_value)
@@ -57,6 +58,11 @@ class PIDcontrol(CBPiKettleLogic):
                 if (heat_percent_old != heat_percent) or (heat_percent != current_kettle_power):
                     await self.actor_set_power(self.heater, heat_percent)
                     heat_percent_old = heat_percent
+                    
+                logger.info(f"HEX PID Calculation: setpoint={pid.setpoint}")
+                logger.info(f"HEX PID Constants: Kp={p}, Ki={i}, Kd={d}, Time Base={sampleTime}")
+                logger.info(f"HEX PID Output: {heat_percent} (Output range: 0-{maxout})")    
+                    
 
                 # Wait for the next cycle
                 await asyncio.sleep(sampleTime)
